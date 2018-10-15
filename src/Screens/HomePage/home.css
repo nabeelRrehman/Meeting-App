@@ -1,0 +1,7 @@
+.profile{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    background-color: darkblue;
+    color: white;
+}
