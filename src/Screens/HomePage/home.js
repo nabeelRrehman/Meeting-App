@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../../Config/Firebase/firebase'
 import './home.css'
-import {Grid} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -101,7 +101,15 @@ class Home extends Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     mobileOpen: false,
+    updatedProfile: false
   };
+
+  componentDidMount() {
+    const user = localStorage.getItem("userUid")
+    firebase.database().ref('/users/' + user + '/profile/').on('child_added',(snapShot)=>{
+      console.log(snapShot.val())
+    })
+  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -163,7 +171,7 @@ class Home extends Component {
         <MenuItem>
           <IconButton color="inherit">
             {/* <Badge className={classes.margin} badgeContent={11} color="secondary"> */}
-              <NotificationsIcon />
+            <NotificationsIcon />
             {/* </Badge> */}
           </IconButton>
           <p>Notifications</p>
@@ -191,7 +199,7 @@ class Home extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton onClick = {this.handleDrawerToggle} className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton onClick={this.handleDrawerToggle} className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
@@ -218,7 +226,7 @@ class Home extends Component {
               </IconButton> */}
               <IconButton color="inherit">
                 {/* <Badge color="secondary"> */}
-                  <NotificationsIcon />
+                <NotificationsIcon />
                 {/* </Badge> */}
               </IconButton>
               <IconButton
@@ -239,7 +247,9 @@ class Home extends Component {
         </AppBar>
         {renderMenu}
         {renderMobileMenu}
-        <Profile />
+        {
+          <Profile />
+        }
       </div>
     );
   }

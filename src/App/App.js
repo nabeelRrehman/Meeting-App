@@ -8,7 +8,7 @@ class App extends Component {
     super()
 
     this.state = {
-      user: false
+      user: true
     }
     this.login = this.login.bind(this)
   }
