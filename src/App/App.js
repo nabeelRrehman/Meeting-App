@@ -16,7 +16,7 @@ class App extends Component {
   componentDidMount() {
     const user = localStorage.getItem('user')
 
-    user && this.setState({ user: true })
+    // user && this.setState({ user: true })
 
   }
 

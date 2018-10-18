@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-
-
+import Input from '@material-ui/core/Input';
+// import swal from 'sweetalert2'
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
@@ -40,7 +40,7 @@ class Profile extends Component {
         super()
 
         this.state = {
-            page: 3,
+            page: 1,
             data: ['Juice', 'Coffee', 'Cocktail'],
             timeDuration: ['20 min', '60 min', '120 min'],
             beverages: [],
@@ -107,19 +107,22 @@ class Profile extends Component {
 
     nextPage2() {
         const user = localStorage.getItem('userUid')
-        const { name, number } = this.state
-        const obj = {
-            name: name,
-            number: number
-        }
-        name && number ?
+        const { name, number, image1, image2, image3 } = this.state
+        if (name && number && image1 && image2 && image3) {
+            const obj = {
+                name: name,
+                number: number,
+                images: [image1, image2, image3]
+            }
             firebase.database().ref('/users/' + user + '/profile/').update(obj)
                 .then(() => {
                     console.log('submit')
-                    this.setState({ page: 2 })
-                }) :
-            console.log('please enter')
 
+                    this.setState({ page: 2 })
+                })
+        } else {
+
+        }
     }
 
     nextPage3() {
@@ -134,6 +137,7 @@ class Profile extends Component {
         firebase.database().ref('/users/' + user + '/profile/').update(obj)
             .then(() => {
                 console.log('submitted')
+                this.props.profileUpdated()
             })
     }
 
@@ -150,6 +154,56 @@ class Profile extends Component {
         this.setState({ coords: { latitude, longitude } })
     }
 
+    image1() {
+        var imageFile = document.getElementsByName('file')[0].files[0];
+        // console.log(imageFile)
+        var fileReader = new FileReader();
+        // console.log(fileReader)
+
+        fileReader.addEventListener("load", () => {
+            const image1 = fileReader.result;
+            console.log(image1, "imageUrl1")
+            this.setState({ image1 })
+        }, false);
+
+        if (imageFile) {
+            fileReader.readAsDataURL(imageFile)
+        }
+    }
+
+    image2() {
+        var imageFile2 = document.getElementsByName('file')[1].files[0];
+        // console.log(imageFile2)
+        var fileReader2 = new FileReader();
+        // console.log(fileReader2)
+
+        fileReader2.addEventListener("load", () => {
+            const image2 = fileReader2.result;
+            console.log(image2, "imageUrl2")
+            this.setState({ image2 })
+        }, false);
+
+        if (imageFile2) {
+            fileReader2.readAsDataURL(imageFile2)
+        }
+    }
+
+    image3() {
+        var imageFile3 = document.getElementsByName('file')[2].files[0];
+        // console.log(imageFile3)
+        var fileReader3 = new FileReader();
+        // console.log(fileReader2)
+
+        fileReader3.addEventListener("load", () => {
+            const image3 = fileReader3.result;
+            console.log(image3, "imageUrl3")
+            this.setState({ image3 })
+        }, false);
+
+        if (imageFile3) {
+            fileReader3.readAsDataURL(imageFile3)
+        }
+    }
 
     render() {
         const { classes } = this.props
@@ -183,6 +237,10 @@ class Profile extends Component {
                             value={number}
                             onChange={(e) => this.setState({ number: e.target.value })}
                         />
+                        <h3>Upload Images</h3>
+                        1. <Input type='file' name='file' onChange={() => { this.image1() }} /><br />
+                        2. <Input type='file' name='file' onChange={() => { this.image2() }} /><br />
+                        3. <Input type='file' name='file' onChange={() => { this.image3() }} /><br />
                         <div>
                             <Button color='primary' onClick={() => this.nextPage2()} variant={'contained'} className={classes.button}>Next</Button>
                         </div>

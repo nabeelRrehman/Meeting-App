@@ -101,13 +101,21 @@ class Home extends Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     mobileOpen: false,
-    updatedProfile: false
   };
 
   componentDidMount() {
     const user = localStorage.getItem("userUid")
-    firebase.database().ref('/users/' + user + '/profile/').on('child_added',(snapShot)=>{
-      console.log(snapShot.val())
+    firebase.database().ref('/users/' + user + '/profile/').on('value', (snapShot) => {
+      // console.log(snapShot.val().location,'profile')
+      if (snapShot.val()) {
+        if (snapShot.val().location) {
+          this.setState({ updatedProfile: false, homepage: 'home' })
+        } else {
+          this.setState({ updatedProfile: true })
+        }
+      } else {
+        this.setState({ updatedProfile: true })
+      }
     })
   }
 
@@ -133,7 +141,7 @@ class Home extends Component {
   };
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, updatedProfile, homepage } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -248,7 +256,11 @@ class Home extends Component {
         {renderMenu}
         {renderMobileMenu}
         {
-          <Profile />
+          updatedProfile && <Profile profileUpdated={() => { this.setState({ updatedProfile: false, homepage: 'home' }) }} />
+        }
+        {
+          homepage === 'home' &&
+          <div>HOME PAGE</div>
         }
       </div>
     );
