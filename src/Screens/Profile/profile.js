@@ -107,12 +107,14 @@ class Profile extends Component {
 
     nextPage2() {
         const user = localStorage.getItem('userUid')
-        const { name, number, image1, image2, image3 } = this.state
-        if (name && number && image1 && image2 && image3) {
+        const { name, number, image1, image2, image3, fullname } = this.state
+        if (name && number && image1 && image2 && image3 && fullname) {
             const obj = {
                 name: name,
                 number: number,
-                images: [image1, image2, image3]
+                images: [image1, image2, image3],
+                fullname: fullname,
+                userUid : user
             }
             firebase.database().ref('/users/' + user + '/profile/').update(obj)
                 .then(() => {
@@ -208,12 +210,23 @@ class Profile extends Component {
     render() {
         const { classes } = this.props
 
-        const { data, timeDuration, page, name, number, coords } = this.state
+        const { data, timeDuration, page, name, number, coords, fullname } = this.state
         return (
             <div>
                 {
                     page === 1 &&
                     <div>
+                        <h3>Name</h3>
+                        <TextField
+                            id="filled-with-placeholder"
+                            label="Name"
+                            placeholder="Your Name"
+                            className={classes.textField}
+                            margin="normal"
+                            variant="filled"
+                            value={fullname}
+                            onChange={(e) => this.setState({ fullname: e.target.value })}
+                        />
                         <h3>Nick Name</h3>
                         <TextField
                             id="filled-with-placeholder"

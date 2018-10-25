@@ -1,0 +1,46 @@
+.recommend-places{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.recommend-places div{
+    /* border: 1px solid black; */
+    cursor: pointer;
+    margin: 5px;
+}
+.recommend-places div:hover{
+    text-decoration: underline;
+    color: blue;
+}
+.search{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;    
+}
+.search div{
+    flex-basis: 100%;
+}
+.search-place{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.search-place div{
+    padding: 10px 15px 10px 15px;
+    margin: 3px;
+    border-radius: 10px;
+    border: 1px solid blue;
+}
+.search-place div:hover{
+    background-color: #3f51b5a8;
+    color: white;
+    border: 1px solid white;
+    transform: scale(1.02);
+    transition: 0.5s;
+    cursor: pointer;
+}

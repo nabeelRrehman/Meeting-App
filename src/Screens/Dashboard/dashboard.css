@@ -1,0 +1,15 @@
+.no-meeting{
+    display: flex;
+    flex-wrap: wrap;
+    flex-basis: 100%;
+    justify-content: center;
+    /* border: 1px solid black; */
+}
+.no-meeting .no-meet{
+    margin-bottom: 2em;
+    /* border: 1px solid black; */
+    margin-top: 5em;
+    color: red;
+    font-weight: 700;
+    flex-basis: 100%;
+}
