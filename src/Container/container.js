@@ -99,8 +99,49 @@ class Container extends Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     mobileOpen: false,
+    request: []
   };
 
+  componentDidMount() {
+    const { request } = this.state
+    const user = localStorage.getItem('userUid')
+
+    firebase.database().ref('/meeting/').on('value', (snapShot) => {
+      for (var key in snapShot.val()) {
+        firebase.database().ref('/meeting/' + key + '/').on('child_added', (snaps) => {
+          // console.log(snaps.key)
+          if (key === user) {
+            // console.log(key, 'key1')
+            // console.log(user, 'user1')
+            console.log(snaps.val().userUid)
+            firebase.database().ref('/users/' + snaps.val().userUid + '/').on('value', (value) => {
+              // console.log(value.val().profile, 'images')
+              const obj = {
+                User1Profile : value.val().profile,
+                request: snaps.val()
+              }
+              request.push(obj)
+              this.setState({ request }, () => {
+                // console.log(this.state.request,'request here')
+              })
+            })
+          }
+        })
+      }
+    })
+  }
+
+  notificaton() {
+    const { request } = this.state
+
+    console.log(request)
+    History.push({
+      pathname: '/requests',
+      state: {
+        request: request
+      }
+    })
+  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -123,8 +164,12 @@ class Container extends Component {
     this.setState({ mobileMoreAnchorEl: null });
   };
 
+  home() {
+    History.push('/dashboard')
+  }
+
   render() {
-    const { anchorEl, mobileMoreAnchorEl, updatedProfile, homepage } = this.state;
+    const { anchorEl, mobileMoreAnchorEl, updatedProfile, homepage, request } = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -138,7 +183,6 @@ class Container extends Component {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleClose}>My account</MenuItem>
         <MenuItem onClick={this.handleClose}>Logout</MenuItem>
       </Menu>
     );
@@ -159,11 +203,17 @@ class Container extends Component {
           </IconButton>
           <p>Messages</p>
         </MenuItem> */}
-        <MenuItem>
+        <MenuItem onClick={() => this.notificaton()}>
           <IconButton color="inherit">
-            {/* <Badge className={classes.margin} badgeContent={11} color="secondary"> */}
-            <NotificationsIcon />
-            {/* </Badge> */}
+            {
+              request.length > 0 ?
+                <Badge color="secondary" badgeContent={request && request.length}>
+                  <NotificationsIcon />
+                </Badge> :
+                // <Badge color="secondary" badgeContent={request && request.length}>
+                <NotificationsIcon />
+              // </Badge>
+            }
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
@@ -193,7 +243,7 @@ class Container extends Component {
             <IconButton onClick={this.handleDrawerToggle} className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography onClick={() => this.home()} style={{ cursor: 'pointer' }} className={classes.title} variant="h6" color="inherit" noWrap>
               {this.props.name}
             </Typography>
             <div className={classes.search}>
@@ -215,10 +265,16 @@ class Container extends Component {
                   <MailIcon />
                 </Badge>
               </IconButton> */}
-              <IconButton color="inherit">
-                {/* <Badge color="secondary"> */}
-                <NotificationsIcon />
-                {/* </Badge> */}
+              <IconButton color="inherit" onClick={() => this.notificaton()}>
+                {
+                  request.length > 0 ?
+                    <Badge color="secondary" badgeContent={request && request.length}>
+                      <NotificationsIcon />
+                    </Badge> :
+                    // <Badge color="secondary" badgeContent={request && request.length}>
+                    <NotificationsIcon />
+                  // </Badge>
+                }
               </IconButton>
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : null}
