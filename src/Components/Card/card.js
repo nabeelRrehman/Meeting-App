@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../../Config/Firebase/firebase'
 import './card.css'
-import Events from '../../Assets/images/event.png'
 import { library, counter } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'

@@ -1,0 +1,90 @@
+.profile-pic{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* border: 1px solid #d9cdcd; */
+}
+.div1{
+    border: 1px solid #d4f4e6;
+    padding: 10px;
+    margin: 10px;
+    margin-top: 2em;
+    border-radius: 15px;
+    /* background-color: #d4f4e6; */
+    box-shadow: 0px 0px 5px 1px black;
+}
+.profile-pic>div:first-child{
+    flex-basis: 100%;
+}
+.user-pics{
+    display: flex;
+    position: relative;
+    margin-left: 11px;
+}
+.user-pics>div:first-child{
+    position: absolute;
+    z-index: 2;
+    left: 82px;
+    /* background-color: #28b4e2; */
+    border-left: none;
+}
+.user-pics>div:nth-child(2){
+    /* background-color: #28b4e2; */
+    /* border: 5px solid #28b4e2; */
+}
+.user-pics>div{
+    width: 80px;
+    height: 80px;
+    padding: 7px;
+    border: 1px solid antiquewhite;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: lightblue;
+}
+.user-pics>div>img{
+    width: 80px;
+    height: 80px;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    overflow: hidden;
+    border-radius: 50%;
+    /* border: 1px solid black; */
+}
+.nameDiv2{
+    width: 190px;
+    font-size: small;
+    margin: 3px;
+    font-weight: 800;
+    color: #28b4e2;
+    border: 1px solid #d9cdcd;
+}
+.nameDiv2>div:first-child{
+    flex-grow: 1;
+}
+.meeting-details{
+    padding: 5px;
+    border: 1px solid #d9cdcd;
+}
+.meeting-details>div{
+    /* border: 1px solid black; */
+    margin: 5px;
+    font-size: small;
+    color: grey;
+    font-weight: 500;
+}
+.meeting-details>div:last-child{
+    color: #28b4e2;
+    font-weight: bold;
+    font-size: 17px;
+}
+.footer-btn>div>button{
+    width: 98%;
+}
+.footer-btn>div{
+    margin: 3px 2px;
+}
+.footer-btn div:last-child>button{
+    width: 47%;
+    margin: 2px
+}
