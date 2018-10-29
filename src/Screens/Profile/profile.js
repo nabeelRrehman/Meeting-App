@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import Input from '@material-ui/core/Input';
-// import swal from 'sweetalert2'
+import swal from 'sweetalert2'
 
 const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     <GoogleMap
@@ -88,6 +88,11 @@ class Profile extends Component {
     }
 
     next() {
+        swal({
+            onOpen: () => {
+                swal.showLoading()
+            },
+        })
         const user = localStorage.getItem('userUid')
         const { beverages, checkTimeDuration } = this.state
         if (!beverages.length || !checkTimeDuration.length) {
@@ -100,12 +105,24 @@ class Profile extends Component {
             firebase.database().ref('/users/' + user + '/profile/').update(obj)
                 .then(() => {
                     console.log('profile added')
+                    swal({
+                        position: 'center',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    this.setState({ page: 2 })
                     this.setState({ page: 3 })
                 })
         }
     }
 
     nextPage2() {
+        swal({
+            onOpen: () => {
+                swal.showLoading()
+            },
+        })
         const user = localStorage.getItem('userUid')
         const { name, number, image1, image2, image3, fullname } = this.state
         if (name && number && image1 && image2 && image3 && fullname) {
@@ -114,12 +131,17 @@ class Profile extends Component {
                 number: number,
                 images: [image1, image2, image3],
                 fullname: fullname,
-                userUid : user
+                userUid: user
             }
             firebase.database().ref('/users/' + user + '/profile/').update(obj)
                 .then(() => {
                     console.log('submit')
-
+                    swal({
+                        position: 'center',
+                        type: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                     this.setState({ page: 2 })
                 })
         } else {
@@ -128,6 +150,11 @@ class Profile extends Component {
     }
 
     nextPage3() {
+        swal({
+            onOpen: () => {
+                swal.showLoading()
+            },
+        })
         const user = localStorage.getItem('userUid')
         const { coords } = this.state
         const obj = {
@@ -139,6 +166,13 @@ class Profile extends Component {
         firebase.database().ref('/users/' + user + '/profile/').update(obj)
             .then(() => {
                 console.log('submitted')
+                swal({
+                    position: 'center',
+                    type: 'success',
+                    title: 'Successfully Updated',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
                 this.props.profileUpdated()
             })
     }

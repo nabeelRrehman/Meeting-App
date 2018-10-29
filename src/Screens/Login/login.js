@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from '../../Config/Firebase/firebase'
 import History from '../../History/History';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
+import './login.css'
 const Provider = new firebase.auth.FacebookAuthProvider()
 
 class Login extends Component {
@@ -26,17 +26,6 @@ class Login extends Component {
 
   login() {
 
-    firebase.auth().signInWithPopup(Provider).then((success) => {
-      console.log('sucess signin')
-      const user = success.user.uid
-      const obj = {
-        email: success.user.email,
-        userUid: user,
-      }
-      localStorage.setItem("userUid", user)
-      firebase.database().ref('users/' + user + '/details/').set(obj)
-      History.push('/dashboard')
-    })
 
   }
 
@@ -46,23 +35,32 @@ class Login extends Component {
     signInFlow: 'popup',
     // We will display Google and Facebook as auth providers.
     signInOptions: [
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-        // firebase.auth.AnonymousAuthProvider.PROVIDER_ID
+      // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+      // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      // firebase.auth.AnonymousAuthProvider.PROVIDER_ID
     ],
     callbacks: {
-        // Avoid redirects after sign-in.
-        signInSuccessWithAuthResult: (success) => { 
-            this.login()
-            // console.log('sucess',success)
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: (success) => {
+        console.log('sucess signin')
+        const user = success.user.uid
+        const obj = {
+          email: success.user.email,
+          userUid: user,
         }
-        
+        localStorage.setItem("userUid", user)
+        firebase.database().ref('users/' + user + '/details/').set(obj)
+        History.push('/dashboard')
+
+        // console.log('sucess',success)
+      }
+
     }
 
-}
+  }
 
   render() {
     return (
@@ -72,19 +70,17 @@ class Login extends Component {
       //   </button>
 
       // </div>
-      <div className="App">
+      <div className="">
         <div className="main">
-          <h1>Meeting App
-</h1>
-
+          <h1>Meeting App</h1>
         </div>
         <br />
         <br />
         <br />
 
         <div className="form">
-          Login here
-                     <br />
+          <h1>Login here</h1>
+          <br />
           <br />
 
           <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()} />

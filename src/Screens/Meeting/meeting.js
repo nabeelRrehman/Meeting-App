@@ -7,6 +7,11 @@ import Axios from 'axios'
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import swal from 'sweetalert2'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDirections } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faDirections)
 
 class Meeting extends Component {
     constructor() {
@@ -22,8 +27,15 @@ class Meeting extends Component {
         }
     }
 
+    componentWillMount() {
+        const { meetingLocation } = this.props.location.state
+        if (meetingLocation) {
+            this.setState({ meetingPlace: meetingLocation, setTime: true })
+        }
+    }
+
     componentDidMount() {
-        const { location, beverages } = this.props.location.state
+        const { location, beverages } = this.props.location.state.userData
         // console.log(this.props.location.state, 'user data')
         const CLIENT_ID = 'M1YXZINYRW1BCTJHKY02TNOIDCBHUS2Y053UOZC0QZKJQVSB'
         const CLIENT_SECRET = 'PYUDNO3MAEA0OXI3RAVCF4YEX0H0LYS1GP53ATFVMTFYD5CX'
@@ -45,7 +57,7 @@ class Meeting extends Component {
     }
 
     search(query) {
-        const { location } = this.props.location.state
+        const { location } = this.props.location.state.userData
         // console.log(this.props.location.state, 'user data')
         const CLIENT_ID = 'M1YXZINYRW1BCTJHKY02TNOIDCBHUS2Y053UOZC0QZKJQVSB'
         const CLIENT_SECRET = 'PYUDNO3MAEA0OXI3RAVCF4YEX0H0LYS1GP53ATFVMTFYD5CX'
@@ -57,8 +69,9 @@ class Meeting extends Component {
         Axios.get(`https://api.foursquare.com/v2/venues/explore?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=20180323&ll=${LATITUDE},${LONGITUDE}&query=${QUERY}`)
             .then((res) => {
                 const recommend = res.data.response.groups[0].items
-                this.setState({ search: recommend })
+                this.setState({ search: recommend, keyIndex2: null, keyIndex: null })
             })
+
     }
 
     setPlace(place) {
@@ -73,16 +86,16 @@ class Meeting extends Component {
             address: venue.location.address ? venue.location.address : 'not available'
         }
         console.log(meetingPlace, 'meeting place')
-        console.log(this.props.location.state, 'user data')
+        // console.log(this.props.location.state.userData, 'user data')
         this.setState({ meetingPlace, setTime: true })
     }
 
     sendRequest() {
         const { meetingPlace, date, time } = this.state
         const user = localStorage.getItem('userUid')
-        const userId = this.props.location.state.userUid
+        const userId = this.props.location.state.userData.userUid
         const request = {
-            user: this.props.location.state,
+            user: this.props.location.state.userData,
             place: meetingPlace,
             date: date,
             time: time,
@@ -92,7 +105,7 @@ class Meeting extends Component {
         console.log(request)
         swal({
             title: 'Are you sure?',
-            text: `You want to send request to ${this.props.location.state.fullname}`,
+            text: `You want to send request to ${this.props.location.state.userData.fullname}`,
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -120,8 +133,32 @@ class Meeting extends Component {
         })
     }
 
+    getDirection(place) {
+        // console.log(place)
+        const venue = place.venue
+        const meetingPlace = {
+            name: venue.name,
+            location: {
+                latitude: venue.location.lat,
+                longitude: venue.location.lng
+            },
+            address: venue.location.address ? venue.location.address : 'not available'
+        }
+        console.log(meetingPlace, 'meeting place')
+        console.log(this.props.location.state.userData, 'user data')
+        // this.setState({ meetingPlace, setTime: true })
+        History.push({
+            pathname: '/getDirection',
+            state: {
+                userData: this.props.location.state.userData,
+                meetingLocation: meetingPlace
+            }
+        })
+
+    }
+
     render() {
-        const { recommended, searchQuery, search, setTime, date, time } = this.state
+        const { recommended, searchQuery, search, setTime, date, time, keyIndex, keyIndex2 } = this.state
         return (
             <Container name={'Meeting App'} >
                 {
@@ -138,8 +175,18 @@ class Meeting extends Component {
                                         recommended.map((items, index) => {
                                             return (
                                                 index <= 2 &&
-                                                <div key={index} onClick={() => this.setPlace(items)}>
-                                                    {items.venue.name}
+                                                <div>
+                                                    <div key={index} className='location' onClick={() => this.setState({ keyIndex: index })}>
+                                                        {items.venue.name}
+                                                    </div>
+                                                    {
+                                                        keyIndex === index &&
+                                                        <span className='location-btn'>
+                                                            <Button color='default' variant={'contained'} onClick={() => this.getDirection(items)} >
+                                                                <FontAwesomeIcon icon='directions' style={{ marginRight: '3px' }} />Get Direction</Button>
+                                                            <Button color='primary' variant={'contained'} onClick={() => this.setPlace(items)} >Next</Button>
+                                                        </ span>
+                                                    }
                                                 </div>
                                             )
                                         })
@@ -169,8 +216,18 @@ class Meeting extends Component {
                                 {
                                     search.map((items, index) => {
                                         return (
-                                            <div key={index} onClick={() => this.setPlace(items)}>
-                                                {items.venue.name}
+                                            <div>
+                                                <div key={index} onClick={() => this.setState({ keyIndex2: index })}>
+                                                    {items.venue.name}
+                                                </div>
+                                                {
+                                                    keyIndex2 === index &&
+                                                    <span className='location-btn'>
+                                                        <Button color='default' variant={'contained'} onClick={() => this.getDirection(items)} >
+                                                            <FontAwesomeIcon icon='directions' style={{ marginRight: '3px' }} />Get Direction</Button>
+                                                        <Button color='primary' variant={'contained'} onClick={() => this.setPlace(items)} >Next</Button>
+                                                    </ span>
+                                                }
                                             </div>
                                         )
                                     })
