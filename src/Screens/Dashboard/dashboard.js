@@ -27,9 +27,18 @@ class Dashboard extends Component {
             arr: [],
             profileKey: [],
             allUsers: [],
-            usersProfile: []
+            usersProfile: [],
+            noUser: false
         }
     }
+
+    static getDerivedStateFromProps(props) {
+        console.log(props.show,'show here')
+        if (props.show) {
+            return { showUser: true }
+        }
+    }
+
     componentDidMount() {
         const uid = localStorage.getItem('userUid')
         // console.log(this.props.userData,'userdata')
@@ -99,7 +108,7 @@ class Dashboard extends Component {
     }
 
     accept(profile) {
-        console.log(profile,'profile')
+        console.log(profile, 'profile')
         swal({
             title: 'Are you sure?',
             text: `You want to meet with ${profile.fullname && profile.fullname}`,
@@ -108,47 +117,57 @@ class Dashboard extends Component {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes'
-          }).then((result) => {
+        }).then((result) => {
             if (result.value) {
-              History.push({
-                  pathname: '/meeting',
-                  state : profile
-              })
+                History.push({
+                    pathname: '/meeting',
+                    state: {
+                        userData: profile
+                    }
+                })
             }
-          })
+        })
     }
 
     render() {
-        const { data, showUser, usersProfile, profileKey } = this.state
+        const { data, showUser, usersProfile, noUser } = this.state
         // console.log(usersProfile, '********user************')
         // console.log(arr, '********user************')
         return (
-            <div className={'no-meeting'}>
-                {
-                    !showUser &&
-                    <div>
-                        <h1>Meeting</h1>
-                        <div className={'no-meet'}>
-                            You haven’t done any meeting yet!
+            <div>
+
+                <div>
+                    {
+                        noUser &&
+                        <div className={'noUser'}>No Users Available</div>
+                    }
+                </div>
+                <div className={'no-meeting'}>
+                    {
+                        !showUser &&
+                        <div>
+                            <h1>Meeting</h1>
+                            <div className={'no-meet'}>
+                                You haven’t done any meeting yet!
                         </div>
-                        <Button color='primary' onClick={() => this.setState({ showUser: true })} variant={'contained'}>Set a meeting!</Button>
-                    </div>
-                }
+                            <Button color='primary' onClick={() => this.setState({ showUser: true })} variant={'contained'}>Set a meeting!</Button>
+                        </div>
+                    }
+                    {
+                        showUser &&
+                        <Cards size={[700, 700]} onEnd={() => this.setState({ noUser: true })} className='master-root'>
+                            {usersProfile.map(items =>
+                                <Card
+                                    onSwipeLeft={() => console.log('ignore')}
+                                    onSwipeRight={() => this.accept(items)}>
+                                    {/* <h2>{item}</h2> */}
+                                    <UserCards name={items.fullname} nickname={items.name} image1={items.images[0]} image2={items.images[1]} image3={items.images[2]} />
+                                </Card>
+                            )}
+                        </Cards>
+                    }
 
-                {
-                    showUser &&
-                    <Cards size={[700, 700]} onEnd={() => console.log('end')} className='master-root'>
-                        {usersProfile.map(items =>
-                            <Card
-                                onSwipeLeft={() => console.log('left')}
-                                onSwipeRight={() => this.accept(items)}>
-                                {/* <h2>{item}</h2> */}
-                                <UserCards name={items.fullname} nickname={items.name} image1 ={items.images[0]} image2 ={items.images[1]} image3 ={items.images[2]}/>
-                            </Card>
-                        )}
-                    </Cards>
-                }
-
+                </div>
             </div>
         );
     }

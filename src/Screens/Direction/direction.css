@@ -1,0 +1,8 @@
+.direction {
+    margin: 1em;
+    font-size: 24px;
+    font-weight: 700;   
+}
+.direction-btn button{
+    margin: 15px 5px;
+}
