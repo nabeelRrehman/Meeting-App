@@ -8,6 +8,7 @@ import Dashboard from '../Dashboard/dashboard';
 // import ProfilePic from '../../Components/ProfilePic/profilePic';
 import MeetingRequest from '../../Components/MeetingRequest/meetingRequest';
 import FabIcon from '../../Components/FabIcon/fabIcon';
+import { connect } from 'react-redux'
 
 
 class Home extends Component {
@@ -97,6 +98,12 @@ class Home extends Component {
 
   }
 
+  static getDerivedStateFromProps(props) {
+    if (props.user) {
+      console.log(props.user, 'userprofile')
+    }
+  }
+
   showUser() {
     this.setState({ showUser: true, profile: 'true', request: false, getRequest: false })
   }
@@ -111,14 +118,6 @@ class Home extends Component {
         {
           profile === 'true' && !request && <Dashboard userData={userData} show={showUser} />
         }
-        {/* {
-          getRequest &&
-          users.map((items => {
-            return (
-              <MeetingRequest request={items.request} image={items.image} date={items.date} time={items.time} name={items.name} location={items.location} />
-            )
-          }))
-        } */}
         {
           getRequest && <MeetingRequest users={users} />
         }
@@ -131,5 +130,20 @@ class Home extends Component {
 
 }
 
+function mapStateToProps(state) {
+  return ({
+    user: state.authReducer.USER
+  })
+}
 
-export default Home;
+function mapDispatchToProps(dispatch) {
+  return ({
+    // CheckUser: () => {
+    //     dispatch(OnAuth())
+    // },
+  })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
+// export default Home;

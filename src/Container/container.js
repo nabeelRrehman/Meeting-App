@@ -106,7 +106,7 @@ class Container extends Component {
     const { request } = this.state
     const user = localStorage.getItem('userUid')
 
-    firebase.database().ref('/meeting/').on('value', (snapShot) => {
+    firebase.database().ref('/meeting/').once('value', (snapShot) => {
       for (var key in snapShot.val()) {
         firebase.database().ref('/meeting/' + key + '/').on('child_added', (snaps) => {
           // console.log(snaps.key)
@@ -114,15 +114,16 @@ class Container extends Component {
             // console.log(key, 'key1')
             // console.log(user, 'user1')
             console.log(snaps.val().userUid)
-            firebase.database().ref('/users/' + snaps.val().userUid + '/').on('value', (value) => {
+            firebase.database().ref('/users/' + snaps.val().userUid + '/').once('value', (value) => {
               // console.log(value.val().profile, 'images')
               const obj = {
                 User1Profile : value.val().profile,
-                request: snaps.val()
+                request: snaps.val(),
+                key : snaps.key
               }
               request.push(obj)
               this.setState({ request }, () => {
-                // console.log(this.state.request,'request here')
+                console.log(this.state.request,'request here')
               })
             })
           }

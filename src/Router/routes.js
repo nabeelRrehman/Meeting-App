@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import { Route, Router } from 'react-router-dom';
 
 import history from '../History/History'
-import firebase from 'firebase'
 import Login from '../Screens/Login/login';
 import home from '../Screens/HomePage/home';
 import Meeting from '../Screens/Meeting/meeting';
 import Directions from '../Screens/Direction/direction';
 import Request from '../Components/Request/request';
+import { connect } from 'react-redux'
+import { OnAuth } from '../store/action/action'
 
 
 class Routers extends Component {
 
     componentWillMount() {
+        this.props.CheckUser()
 
     }
 
@@ -31,4 +33,21 @@ class Routers extends Component {
     }
 }
 
-export default Routers;
+function mapStateToProps(state) {
+    return ({
+        user: state.authReducer.USER
+    })
+}
+
+function mapDispatchToProps(dispatch) {
+    return ({
+        CheckUser: () => {
+            dispatch(OnAuth())
+        },
+    })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routers);
+
+
+// export default Routers;

@@ -7,7 +7,7 @@ import Container from '../../Container/container';
 import './direction.css'
 import { Button } from '@material-ui/core';
 import History from '../../History/History'
-// import { useDecimal } from 'geolib';
+import { useDecimal } from 'geolib';
 
 class Directions extends Component {
     constructor() {
