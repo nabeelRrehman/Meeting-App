@@ -29,14 +29,23 @@ class ProfilePic extends Component {
     }
 
     getDirection(direction) {
-        console.log(direction,'direction')
+        console.log(direction, 'direction')
         History.push({
             pathname: '/getDirection',
-            state : {
-                userData : direction.user1,
-                meetingLocation : direction.place
+            state: {
+                userData: direction.user1,
+                meetingLocation: direction.place
             }
         })
+    }
+
+    confirm(direction) {
+        console.log(direction, 'direcrionhere')
+    }
+
+    cancelRequest(direction) {
+        console.log(direction, 'cancel direction hre')
+
     }
 
     profilePic(user1Image, user2Image, name, date, time, location, timeDuration, direction) {
@@ -75,12 +84,12 @@ class ProfilePic extends Component {
                         </Button>
                     </div>
                     <div>
-                        <Button color='secondary' variant={'contained'}>
+                        <Button color='secondary' onClick={() => this.cancelRequest(direction)} variant={'contained'}>
                             Cancel
-                    </Button>
-                        <Button color='primary' variant={'contained'}>
+                        </Button>
+                        <Button onClick={() => this.confirm(direction)} color='primary' variant={'contained'}>
                             Confirm
-                    </Button>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -103,11 +112,12 @@ class ProfilePic extends Component {
                         const { user, place, date, time } = items.request
                         const direction = {
                             user1: items.User1Profile,
-                            place: items.request.place
+                            place: items.request.place,
+                            key: items.key
                         }
                         return (
                             items.request.user.userUid === userId &&
-                            this.profilePic(images[0], user.images[0], fullname, date, time, place.name,timeDuration[0], direction)
+                            this.profilePic(images[0], user.images[0], fullname, date, time, place.name, timeDuration[0], direction)
                         )
                     })
                 }

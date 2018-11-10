@@ -16,6 +16,7 @@
     "geolib": "^2.0.24",
     "material-ui-upload": "^1.2.1",
     "react": "^16.5.2",
+    "react-add-to-calendar": "^0.1.5",
     "react-dom": "^16.5.2",
     "react-facebook-emoji": "^1.0.11",
     "react-fb-image-grid": "^0.1.3",

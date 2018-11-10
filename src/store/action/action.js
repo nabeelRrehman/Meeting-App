@@ -16,12 +16,12 @@ export function OnAuth() {
                     // console.log(snapShot.val(),'snaps')
                     dispatch({ type: actionTypes.USER, payload: snapShot.val() })
                 })
-                History.push('/dashboard') 
+                // History.push('/dashboard') 
                 // ...
             } else {
                 // User is signed out.
                 // ...
-                History.push('/')
+                // History.push('/')
 
             }
         });

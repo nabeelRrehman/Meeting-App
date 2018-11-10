@@ -98,12 +98,6 @@ class Home extends Component {
 
   }
 
-  static getDerivedStateFromProps(props) {
-    if (props.user) {
-      console.log(props.user, 'userprofile')
-    }
-  }
-
   showUser() {
     this.setState({ showUser: true, profile: 'true', request: false, getRequest: false })
   }
@@ -132,7 +126,7 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return ({
-    user: state.authReducer.USER
+    userPro: state.authReducer.USER
   })
 }
 
