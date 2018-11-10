@@ -15,33 +15,20 @@ class Request extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.location.state)
+        // console.log(this.props.location.state)
         const { request } = this.props.location.state
-        // const userId = localStorage.getItem('userUid')
-        // console.log(request,'requests')
-        this.setState({ requests: request })
+        this.setState({ requests: request },()=>{
+            // console.log(this.state.requests,'user request')
+        })
 
     }
 
     render() {
         const { requests } = this.state
-        const userId = localStorage.getItem('userUid')
         return (
             <Container name={'Meeting App'} >
                 {
-                    requests.map((items) => {
-                        const { fullname, images, location, timeDuration } = items.User1Profile
-                        const { user, place, date, time } = items.request
-                        const direction = {
-                            userDirection: location,
-                            location: place.location
-                        }
-                        console.log(items, 'items')
-                        return (
-                            items.request.user.userUid === userId &&
-                            <ProfilePic user1Image={images[0]} date={date} time={time} timeDuration={timeDuration[0]} direction={direction} user2Image={user.images[0]} name={fullname} location={place.name} />
-                        )
-                    })
+                    <ProfilePic requests={requests} />
                 }
             </Container>
         );

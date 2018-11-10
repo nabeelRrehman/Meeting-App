@@ -33,7 +33,7 @@ class Dashboard extends Component {
     }
 
     static getDerivedStateFromProps(props) {
-        console.log(props.show,'show here')
+        // console.log(props.show,'show here')
         if (props.show) {
             return { showUser: true }
         }
@@ -177,6 +177,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
     classes: PropTypes.object.isRequired,
 };
+
 
 export default withStyles(styles)(Dashboard);
 

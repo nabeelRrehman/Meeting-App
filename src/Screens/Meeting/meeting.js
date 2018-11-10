@@ -29,8 +29,11 @@ class Meeting extends Component {
 
     componentWillMount() {
         const { meetingLocation } = this.props.location.state
+        const user = localStorage.getItem('userUid')
         if (meetingLocation) {
             this.setState({ meetingPlace: meetingLocation, setTime: true })
+        }
+        else {
         }
     }
 
