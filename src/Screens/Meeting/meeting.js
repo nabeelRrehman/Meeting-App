@@ -103,7 +103,7 @@ class Meeting extends Component {
             date: date,
             time: time,
             userUid: user,
-            request: 'pending'
+            request: 'Pending'
         }
         console.log(request)
         swal({

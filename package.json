@@ -15,6 +15,7 @@
     "geo-lib": "^0.3.1",
     "geolib": "^2.0.24",
     "material-ui-upload": "^1.2.1",
+    "node-sass": "^4.10.0",
     "react": "^16.5.2",
     "react-add-to-calendar": "^0.1.5",
     "react-dom": "^16.5.2",

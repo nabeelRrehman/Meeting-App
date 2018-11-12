@@ -37,8 +37,19 @@ class MeetingRequest extends Component {
         return (
             <div className='div2'>
                 <div className={'status'}>
-                    {request}...
-                    </div>
+                    {
+                        request === 'Pending' &&
+                        <div>
+                            {request}...
+                        </div>
+                    }
+                    {
+                        request === 'Accepted' &&
+                        <div style={{color:'green'}}>
+                            {request}...
+                        </div>
+                    }
+                </div>
                 <div className='user-pics2'>
                     <div>
                         <img src={image} />

@@ -50,6 +50,7 @@ class Dashboard extends Component {
                 const beverages = snapshot.val().profile.beverages
                 const duration = snapshot.val().profile.timeDuration
                 const profile = snapshot.val().profile
+                this.state.userData.beverages &&
                 this.state.userData.beverages.map(items => {
                     if (beverages.indexOf(items) !== -1) {
                         // console.log(snapshot.key, 'profile bever')
@@ -57,6 +58,7 @@ class Dashboard extends Component {
                         user.push(snapshot.key)
                         this.setState({ user })
                     }
+                    this.state.userData.duration &&
                     this.state.userData.duration.map(item => {
                         if (duration.indexOf(item) !== -1) {
                             // console.log(duration)
