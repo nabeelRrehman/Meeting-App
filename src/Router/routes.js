@@ -9,13 +9,16 @@ import Directions from '../Screens/Direction/direction';
 import Request from '../Components/Request/request';
 import { connect } from 'react-redux'
 import { OnAuth } from '../store/action/action'
+import UpdateProfile from '../Screens/UpdateProfile/updateProfile';
+import { RequestMeeting } from '../store/action/action'
 
 
 class Routers extends Component {
 
     componentWillMount() {
+        const user = localStorage.getItem('userUid')
         this.props.CheckUser()
-
+        this.props.getMeetingRequest(user)
     }
 
     render() {
@@ -27,6 +30,7 @@ class Routers extends Component {
                     <Route exact path='/meeting' component={Meeting} />
                     <Route exact path='/getDirection' component={Directions} />
                     <Route exact path='/requests' component={Request} />
+                    <Route exact path='/profile' component={UpdateProfile} />
                 </div>
             </Router>
         )
@@ -43,6 +47,9 @@ function mapDispatchToProps(dispatch) {
     return ({
         CheckUser: () => {
             dispatch(OnAuth())
+        },
+        getMeetingRequest: (user) => {
+            dispatch(RequestMeeting(user))
         },
     })
 }

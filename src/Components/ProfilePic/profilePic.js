@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDirections, faCalendarAlt, faClock, faMapMarkerAlt, faCalendarPlus } from '@fortawesome/free-solid-svg-icons'
 import ReactAddToCalendar from 'react-add-to-calendar';
 import swal from 'sweetalert2'
+import Moment from 'react-moment';
+
 
 library.add(faDirections, faCalendarAlt, faClock, faMapMarkerAlt, faCalendarPlus)
 
@@ -35,7 +37,7 @@ class ProfilePic extends Component {
         const userUid = localStorage.getItem('userUid')
 
         firebase.database().ref('/meeting/' + userUid + '/').on('child_added', (snapShot) => {
-            console.log(snapShot.val(), 'snapsoshujiu')
+            // console.log(snapShot.val(), 'snapsoshujiu')
             if (snapShot.val().request === 'Accepted') {
                 accepted.push(snapShot.key)
                 this.setState({
@@ -46,7 +48,7 @@ class ProfilePic extends Component {
         })
 
         firebase.database().ref('/meeting/' + userUid + '/').on('child_changed', (snapShot) => {
-            console.log(snapShot.val(), 'ye child hwa hah changed')
+            // console.log(snapShot.val(), 'ye child hwa hah changed')
             if (snapShot.val().request === 'Accepted') {
                 accepted.push(snapShot.key)
                 this.setState({
@@ -105,19 +107,47 @@ class ProfilePic extends Component {
 
     cancelRequest(direction) {
         console.log(direction, 'cancel direction hre')
-
+        swal({
+            title: 'Are you sure?',
+            text: `You want to cancel request from ${direction.user1.fullname}`,
+            type: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.value) {
+                const obj = {
+                    request: 'Cancelled'
+                }
+                firebase.database().ref('/meeting/' + direction.userUid + '/' + direction.key).update(obj)
+                swal({
+                    position: 'center',
+                    type: 'success',
+                    title: 'Request Cancelled',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
     }
 
     addToCalendar(name, time, date) {
-        console.log(time)
-        const obj = {
-            title: 'Meeting',
-            description: 'This is the sample event provided as an example only',
-            location: name,
-            startTime: date+'T'+time,
-            endTime: date+'T'+time
+        var pm = time.indexOf('PM')
+        var am = time.indexOf('AM')
+        if (pm !== -1 || am !== -1) {
+            const tm = time.slice(0, am - 1 || pm - 1)
+            // console.log(time.slice(0,am-1 || pm-1))
+            const obj = {
+                title: 'Meeting',
+                description: 'This is the sample event provided as an example only',
+                location: name,
+                startTime: <Moment parse="YYYY-MM-DD HH:mm">{date + 'T' + tm}</Moment>,
+                endTime: <Moment parse="YYYY-MM-DD HH:mm">{date + 'T' + tm}</Moment>
+            }
+            this.setState({ event: obj })
         }
-        this.setState({event : obj})
     }
 
     profilePic(user1Image, user2Image, name, date, time, location, timeDuration, direction, key) {
@@ -140,8 +170,8 @@ class ProfilePic extends Component {
                         <FontAwesomeIcon icon='calendar-alt' style={{ marginRight: '3px' }} />{date}
                     </div>
                     <div>
-                        <FontAwesomeIcon icon='clock' style={{ marginRight: '3px' }} />{time} PM
-                </div>
+                        <FontAwesomeIcon icon='clock' style={{ marginRight: '3px' }} />{time}
+                    </div>
                     <div>
                         <FontAwesomeIcon icon='map-marker-alt' style={{ marginRight: '3px' }} />{location}
                     </div>
@@ -161,7 +191,7 @@ class ProfilePic extends Component {
                             accepted.length > 0 &&
                                 accepted.indexOf(key) !== -1 ?
                                 <div className={'calendar'}>
-                                    <div>
+                                    <div className={'fontawe'}>
                                         <FontAwesomeIcon style={{ marginRight: '3px' }} icon={'calendar-plus'} />
                                     </div>
                                     <div onClick={() => this.addToCalendar(location, time, date)}>

@@ -112,3 +112,13 @@
 .calendar div:first-child{
     margin-right: 5px;
 }
+a{
+    text-decoration: none !important;
+}
+a:hover{
+    text-decoration: underline !important;
+    color: #28b4e2;
+}
+a:hover .fontawe{
+    color: #28b4e2 !important;
+}
