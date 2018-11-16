@@ -29,3 +29,19 @@ export function OnAuth() {
 }
 
 
+export function RequestMeeting(user) {
+    return dispatch => {
+        const arr = []
+        // console.log(user ,'usermil rha ha')
+        firebase.database().ref('/meeting/').on('child_added',(snapShot)=>{
+            console.log(snapShot.val(),'meetings hai yaahan par')
+            for(var key in snapShot.val()){
+                arr.push(snapShot.val()[key])
+                dispatch({ type: actionTypes.REQUEST, payload: arr })
+            }
+          
+            
+        })
+    }
+}
+
