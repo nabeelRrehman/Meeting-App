@@ -160,6 +160,56 @@ class Meeting extends Component {
 
     }
 
+    setTheTime(time) {
+        var star = time.slice(0, 2)
+        var end = time.slice(2)
+        switch (star) {
+            case '12':
+                this.setState({ time: '12' + end + ' PM' })
+                break;
+            case '00':
+                this.setState({ time: '12' + end + ' AM' })
+                break;
+            case '13':
+                this.setState({ time: '01' + end + ' PM' })
+                break;
+            case '14':
+                this.setState({ time: '02' + end + ' PM' })
+                break;
+            case '15':
+                this.setState({ time: '03' + end + ' PM' })
+                break;
+            case '16':
+                this.setState({ time: '04' + end + ' PM' })
+                break;
+            case '17':
+                this.setState({ time: '05' + end + ' PM' })
+                break;
+            case '18':
+                this.setState({ time: '06' + end + ' PM' })
+                break;
+            case '19':
+                this.setState({ time: '07' + end + ' PM' })
+                break;
+            case '20':
+                this.setState({ time: '08' + end + ' PM' })
+                break;
+            case '21':
+                this.setState({ time: '09' + end + ' PM' })
+                break;
+            case '22':
+                this.setState({ time: '10' + end + ' PM' })
+                break;
+            case '23':
+                this.setState({ time: '11' + end + ' PM' })
+                break;
+            default:
+                this.setState({ time: time + ' AM' })
+                break;
+        }
+
+    }
+
     render() {
         const { recommended, searchQuery, search, setTime, date, time, keyIndex, keyIndex2 } = this.state
         return (
@@ -262,7 +312,7 @@ class Meeting extends Component {
                             type="time"
                             style={{ width: 200 }}
                             defaultValue={time}
-                            onChange={(e) => console.log(e.target.value)}
+                            onChange={(e) => this.setTheTime(e.target.value)}
                             InputLabelProps={{
                                 shrink: true,
                             }}

@@ -49,6 +49,24 @@ class MeetingRequest extends Component {
                             {request}...
                         </div>
                     }
+                    {
+                        request === 'Cancelled' &&
+                        <div style={{color:'red'}}>
+                            {request}...
+                        </div>
+                    }
+                    {
+                        request === 'Complicated' &&
+                        <div style={{color:'yellow'}}>
+                            {request}...
+                        </div>
+                    }
+                    {
+                        request === 'Done' &&
+                        <div style={{color:'blue'}}>
+                            {request}...
+                        </div>
+                    }
                 </div>
                 <div className='user-pics2'>
                     <div>
@@ -63,7 +81,7 @@ class MeetingRequest extends Component {
                         <FontAwesomeIcon icon='calendar-alt' style={{ marginRight: '3px' }} />{date}
                     </div>
                     <div>
-                        <FontAwesomeIcon icon='clock' style={{ marginRight: '3px' }} />{time} PM
+                        <FontAwesomeIcon icon='clock' style={{ marginRight: '3px' }} />{time}
                         </div>
                     <div>
                         <FontAwesomeIcon icon='map-marker-alt' style={{ marginRight: '3px' }} />{location}

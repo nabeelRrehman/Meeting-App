@@ -10,7 +10,7 @@ import Request from '../Components/Request/request';
 import { connect } from 'react-redux'
 import { OnAuth } from '../store/action/action'
 import UpdateProfile from '../Screens/UpdateProfile/updateProfile';
-import { RequestMeeting } from '../store/action/action'
+import { RequestMeeting, UserProfile } from '../store/action/action'
 
 
 class Routers extends Component {
@@ -19,6 +19,8 @@ class Routers extends Component {
         const user = localStorage.getItem('userUid')
         this.props.CheckUser()
         this.props.getMeetingRequest(user)
+
+        this.props.getUserProfile()
     }
 
     render() {
@@ -50,6 +52,9 @@ function mapDispatchToProps(dispatch) {
         },
         getMeetingRequest: (user) => {
             dispatch(RequestMeeting(user))
+        },
+        getUserProfile: () => {
+            dispatch(UserProfile())
         },
     })
 }

@@ -37,7 +37,9 @@ class Dashboard extends Component {
         if (props.show) {
             return { showUser: true }
         }
+        return true
     }
+
 
     componentDidMount() {
         const uid = localStorage.getItem('userUid')
@@ -51,60 +53,60 @@ class Dashboard extends Component {
                 const duration = snapshot.val().profile.timeDuration
                 const profile = snapshot.val().profile
                 this.state.userData.beverages &&
-                this.state.userData.beverages.map(items => {
-                    if (beverages.indexOf(items) !== -1) {
-                        // console.log(snapshot.key, 'profile bever')
-                        // console.log(beverages)
-                        user.push(snapshot.key)
-                        this.setState({ user })
-                    }
-                    this.state.userData.duration &&
-                    this.state.userData.duration.map(item => {
-                        if (duration.indexOf(item) !== -1) {
-                            // console.log(duration)
+                    this.state.userData.beverages.map(items => {
+                        if (beverages.indexOf(items) !== -1) {
+                            // console.log(snapshot.key, 'profile bever')
+                            // console.log(beverages)
                             user.push(snapshot.key)
-                            // console.log(profile, 'profile dura')
-                            this.setState({ user }, () => {
-                                const array = []
-                                this.state.user.map(item => {
-                                    if (array.indexOf(item) === -1 && item !== uid) {
-                                        array.push(item)
-                                        this.setState({ array }, () => {
-                                            // console.log(this.state.array,'this.state.array')
-                                            // console.log(profile.location, 'uprofile')
-                                            const result = geolib.isPointInCircle(
-                                                this.props.userData.location,
-                                                { latitude: profile.location.latitude, longitude: profile.location.longitude },
-                                                100000      ///isko 5 km krna ha value 5000
-                                            );
-                                            if (result) {
-                                                if (snapshot.key !== uid) {
-                                                    // console.log(snapshot.key, 'keys')
-                                                    const { profileKey, allUsers, usersProfile } = this.state
-
-                                                    if (profileKey.indexOf(snapshot.key) === -1) {
-                                                        firebase.database().ref('/users/' + snapshot.key + '/profile').once('value', (snapShot) => {
-                                                            // console.log(snapShot.val(), 'val()')
-                                                            allUsers.push(snapShot.val())
-                                                            this.setState({ allUsers }, () => {
-                                                                // console.log(this.state.allUsers,'all users here')
-                                                                const userPro = Object.values(this.state.allUsers.reduce((acc, cur) => Object.assign(acc, { [cur.number]: cur }), {}))
-                                                                this.setState({ usersProfile: userPro })
-                                                            })
-                                                        })
-                                                    }
-                                                }
-                                            }
-                                        })
-                                    } else {
-                                    }
-
-                                })
-                                // console.log(this.state.user, 'user here')
-                            })
+                            this.setState({ user })
                         }
+                        this.state.userData.duration &&
+                            this.state.userData.duration.map(item => {
+                                if (duration.indexOf(item) !== -1) {
+                                    // console.log(duration)
+                                    user.push(snapshot.key)
+                                    // console.log(profile, 'profile dura')
+                                    this.setState({ user }, () => {
+                                        const array = []
+                                        this.state.user.map(item => {
+                                            if (array.indexOf(item) === -1 && item !== uid) {
+                                                array.push(item)
+                                                this.setState({ array }, () => {
+                                                    // console.log(this.state.array,'this.state.array')
+                                                    // console.log(profile.location, 'uprofile')
+                                                    const result = geolib.isPointInCircle(
+                                                        this.props.userData.location,
+                                                        { latitude: profile.location.latitude, longitude: profile.location.longitude },
+                                                        100000      ///isko 5 km krna ha value 5000
+                                                    );
+                                                    if (result) {
+                                                        if (snapshot.key !== uid) {
+                                                            // console.log(snapshot.key, 'keys')
+                                                            const { profileKey, allUsers, usersProfile } = this.state
+
+                                                            if (profileKey.indexOf(snapshot.key) === -1) {
+                                                                firebase.database().ref('/users/' + snapshot.key + '/profile').once('value', (snapShot) => {
+                                                                    // console.log(snapShot.val(), 'val()')
+                                                                    allUsers.push(snapShot.val())
+                                                                    this.setState({ allUsers }, () => {
+                                                                        // console.log(this.state.allUsers,'all users here')
+                                                                        const userPro = Object.values(this.state.allUsers.reduce((acc, cur) => Object.assign(acc, { [cur.number]: cur }), {}))
+                                                                        this.setState({ usersProfile: userPro })
+                                                                    })
+                                                                })
+                                                            }
+                                                        }
+                                                    }
+                                                })
+                                            } else {
+                                            }
+
+                                        })
+                                        // console.log(this.state.user, 'user here')
+                                    })
+                                }
+                            })
                     })
-                })
             })
         })
     }
@@ -163,7 +165,7 @@ class Dashboard extends Component {
                                     onSwipeLeft={() => console.log('ignore')}
                                     onSwipeRight={() => this.accept(items)}>
                                     {/* <h2>{item}</h2> */}
-                                    <UserCards name={items.fullname} nickname={items.name} image1={items.images[0]} image2={items.images[1]} image3={items.images[2]} />
+                                    <UserCards name={items.fullname} meet={() => this.accept(items)} nickname={items.name} image1={items.images[0]} image2={items.images[1]} image3={items.images[2]} />
                                 </Card>
                             )}
                         </Cards>

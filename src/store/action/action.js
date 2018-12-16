@@ -36,12 +36,23 @@ export function RequestMeeting(user) {
         firebase.database().ref('/meeting/').on('child_added',(snapShot)=>{
             console.log(snapShot.val(),'meetings hai yaahan par')
             for(var key in snapShot.val()){
-                arr.push(snapShot.val()[key])
+                const obj = {
+                    request : snapShot.val()[key],
+                    key : key
+                }
+                arr.push(obj)
                 dispatch({ type: actionTypes.REQUEST, payload: arr })
-            }
-          
-            
+            }    
         })
     }
 }
 
+export function UserProfile() {
+    return dispatch => {
+        const arr = []
+        firebase.database().ref('/users').on('value',(snapShot)=>{
+            console.log(snapShot.val(),'snaps')
+            dispatch({ type: actionTypes.USERPROFILE, payload: snapShot.val() })
+        })
+    }
+}

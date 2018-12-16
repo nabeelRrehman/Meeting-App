@@ -169,6 +169,10 @@ class Container extends Component {
     History.push('/dashboard')
   }
 
+  profile() {
+    History.push('/profile')
+  }
+
   render() {
     const { anchorEl, mobileMoreAnchorEl, updatedProfile, homepage, request } = this.state;
     const { classes } = this.props;
@@ -183,7 +187,7 @@ class Container extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+        <MenuItem onClick={this.profile}>Profile</MenuItem>
         <MenuItem onClick={this.handleClose}>Logout</MenuItem>
       </Menu>
     );

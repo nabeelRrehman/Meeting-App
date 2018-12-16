@@ -1,7 +1,8 @@
 
 const actionTypes = {
     USER: 'USER',
-    REQUEST: 'REQUEST'
+    REQUEST: 'REQUEST',
+    USERPROFILE : 'USERPROFILE'
 }
 
 export default actionTypes

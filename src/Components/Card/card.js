@@ -21,30 +21,23 @@ class Card extends Component {
             images: [
                 {
                     original: props.image1,
-                    thumbnail: props.image1,
                 },
                 {
                     original: props.image2,
-                    thumbnail: props.image2,
                 },
                 {
                     original: props.image3,
-                    thumbnail: props.image3,
                 }
             ]
         }
     }
 
-    componentWillReceiveProps(props) {
-        // console.log(props.matchUsers)
-        // props.matchUsers &&
-        //     props.matchUsers.length &&
-        //     props.matchUsers.map(items => {
-        //         firebase.database().ref('/users/'+items+'/profile').on('child_added', (snapShot) => {
-        //             console.log(snapShot.val())
-        //         })
-        //     })
+    meet() {
+        this.props.meet()
+    }
 
+    cancel() {
+        this.props.cancel()
     }
 
     render() {
@@ -54,11 +47,11 @@ class Card extends Component {
             <div className='main-container'>
                 <div className={'cards'}>
                     <div className={'card-img'}>
-                        <ImageGallery items={images} />
+                        <ImageGallery showThumbnails={false} items={images} />
                     </div>
                     <div className={'nameDiv'}>
                         <div>
-                            <div>
+                            <div onClick={() => this.cancel()}>
                                 <FontAwesomeIcon icon='times' className={'cross'} />
                             </div>
                         </div>
@@ -67,7 +60,7 @@ class Card extends Component {
                             <span>{nickname}</span>
                         </div>
                         <div className={'select'}>
-                            <div>
+                            <div onClick={() => this.meet()}>
                                 <FontAwesomeIcon icon='check' className={'check'} />
                             </div>
                         </div>

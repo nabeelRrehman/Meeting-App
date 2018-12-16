@@ -9,6 +9,7 @@ import Dashboard from '../Dashboard/dashboard';
 import MeetingRequest from '../../Components/MeetingRequest/meetingRequest';
 import FabIcon from '../../Components/FabIcon/fabIcon';
 import { connect } from 'react-redux'
+import swal from 'sweetalert2'
 
 
 class Home extends Component {
@@ -98,6 +99,138 @@ class Home extends Component {
 
   }
 
+  componentWillReceiveProps(props) {
+    console.log(props.userPro, 'us waly ka naam ')
+    const userId = localStorage.getItem('userUid')
+    if (props.UserRequest !== this.props.UserRequest) {
+      // console.log(props.request,'request here aaaaaaaaaaaa')
+      var timout = setTimeout(() => {
+        props.UserRequest.map((items) => {
+          console.log(items, 'keyssssssssss*************')
+          var date = new Date(items.request.date + ' ' + items.request.time).getTime()
+          var curr = new Date(Date.now()).getTime()
+
+          if (items.request.request === 'Accepted') {
+
+            if (items.request.userUid === userId) {
+              if (curr > date || userId ) {    // yahan par userId ko mitana ha
+                console.log('greater')
+                firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key+'/user1').on('value', (snapShot) => {
+                  console.log(snapShot.val())
+                  if (snapShot.exists()) {
+                    console.log('exists')
+                  } else {
+                    console.log('not exists')
+                    swal({
+                      title: 'Meeting!!!',
+                      text: `Was the Meeting Successfull?`,
+                      type: 'warning',
+                      showCancelButton: true,
+                      cancelButtonText: 'No',
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes'
+                    }).then((result) => {
+                      console.log(result)
+                      if (result.value) {
+                        const obj = {
+                          user1: userId,
+                          answer1: 'yes'
+                        }
+                        firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key).update(obj)
+                          .then(() => {
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: 'Added',
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                          })
+                      } else if (result.dismiss === 'cancel') {
+                        const obj = {
+                          user1: userId,
+                          answer1: 'no'
+                        }
+                        firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key).update(obj)
+                          .then(() => {
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: 'Added',
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                          })
+                      }
+                    })
+                  }
+                })
+              }
+            }
+            else if (userId === items.request.user.userUid) {
+              if (curr > date) {
+                // console.log('greater')
+                firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key+'/user2').on('value', (snapShot) => {
+                  console.log(snapShot.val())
+                  if (snapShot.exists()) {
+                    // console.log('exists')
+                  } else {
+                    // console.log('not exists')
+                    swal({
+                      title: 'Meeting!!!',
+                      text: `Was the Meeting Successfull?`,
+                      type: 'warning',
+                      showCancelButton: true,
+                      cancelButtonText: 'No',
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes'
+                    }).then((result) => {
+                      // console.log(result)
+                      if (result.value) {
+                        const obj = {
+                          user2: userId,
+                          answer2: 'yes'
+                        }
+                        firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key).update(obj)
+                          .then(() => {
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: 'Added',
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                          })
+                      } else if (result.dismiss === 'cancel') {
+                        const obj = {
+                          user2: userId,
+                          answer2: 'no'
+                        }
+                        firebase.database().ref('/postMeeting/' + items.request.userUid + '/' + items.key).update(obj)
+                          .then(() => {
+                            swal({
+                              position: 'center',
+                              type: 'success',
+                              title: 'Added',
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                          })
+                      }
+                    })
+                  }
+                })
+              }
+            }
+          }
+        }, 3000);
+      })
+    }
+    //  console.log(< TimeAgo date = {`${items.date} ${items.time}`} />)
+  }
+
   showUser() {
     this.setState({ showUser: true, profile: 'true', request: false, getRequest: false })
   }
@@ -126,15 +259,14 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return ({
-    userPro: state.authReducer.USER
+    userPro: state.authReducer.USER,
+    UserRequest: state.authReducer.REQUEST
   })
 }
 
 function mapDispatchToProps(dispatch) {
   return ({
-    // CheckUser: () => {
-    //     dispatch(OnAuth())
-    // },
+
   })
 }
 

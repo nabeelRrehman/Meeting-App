@@ -3,7 +3,8 @@ import firebase from '../../Config/Firebase/firebase'
 import History from '../../History/History';
 import Container from '../../Container/container';
 import ProfilePic from '../../Components/ProfilePic/profilePic';
-// import MeetingRequest from '../../Components/MeetingRequest/meetingRequest';
+import { connect } from 'react-redux'
+import { SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS } from 'constants';
 
 
 class Request extends Component {
@@ -17,11 +18,12 @@ class Request extends Component {
     componentDidMount() {
         // console.log(this.props.location.state)
         const { request } = this.props.location.state
-        this.setState({ requests: request },()=>{
+        this.setState({ requests: request }, () => {
             // console.log(this.state.requests,'user request')
         })
 
     }
+
 
     render() {
         const { requests } = this.state
@@ -30,10 +32,25 @@ class Request extends Component {
                 {
                     <ProfilePic requests={requests} />
                 }
+
             </Container>
         );
     }
 }
 
+function mapStateToProps(state) {
+    return ({
+        UserRequest: state.authReducer.REQUEST
+    })
+}
 
-export default Request;
+function mapDispatchToProps(dispatch) {
+    return ({
+
+    })
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Request);
+
+
+// export default Request;
